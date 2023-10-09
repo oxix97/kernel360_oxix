@@ -16,6 +16,7 @@ public enum Command {
     CAREER_TITLE("근무기간,근무처,담당업무,근속연수"),
     EDUCATION_TITLE("졸업년도,학교명,전공,졸업여부"),
 
+    IMG_ERR("이미지 처리 중 문제 발생"),
     CREATE_ERR("엑셀 파일 생성 중 문제 발생"),
     SAVE_ERR("엑셀 파일 저장 중 문제 발생"),
     ;
