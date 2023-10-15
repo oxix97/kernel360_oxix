@@ -3,6 +3,9 @@ package org.example.model;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Getter
 @Setter
 public class Education {
@@ -44,6 +47,14 @@ public class Education {
                 major,
                 graduationStatus
         );
+    }
+
+    public static List<String> toList(Education dto) {
+        return List.of(dto.getGraduationYear(), dto.getSchoolName(), dto.getMajor(), dto.getGraduationStatus());
+    }
+
+    public static List<List<String>> toList(List<Education> dtos) {
+        return dtos.stream().map(Education::toList).collect(Collectors.toList());
     }
 
     @Override
