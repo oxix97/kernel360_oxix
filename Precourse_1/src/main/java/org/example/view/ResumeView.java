@@ -1,9 +1,9 @@
 package org.example.view;
 
 import org.example.model.Career;
+import org.example.model.Command;
 import org.example.model.Education;
 import org.example.model.PersonInfo;
-import org.example.model.Command;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,6 +56,7 @@ public class ResumeView {
             if (input.trim().isEmpty()) break;
             sb.append(input).append('\n');
         }
+        sc.close();
         return sb.toString();
     }
 }
