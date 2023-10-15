@@ -1,5 +1,6 @@
 package org.example.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.util.IOUtils;
 import org.apache.poi.xssf.usermodel.*;
@@ -15,11 +16,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
+@RequiredArgsConstructor
 public class ResumeController {
     private FileOutputStream outputStream;
     private XSSFWorkbook workbook;
-    private ResumeView view;
-    private int idx = 0;
+    private final ResumeView view;
 
     public void run() {
         createResume();
@@ -33,7 +34,6 @@ public class ResumeController {
         try {
             outputStream = new FileOutputStream("resume.xlsx");
             workbook = new XSSFWorkbook();
-            view = new ResumeView();
         } catch (IOException e) {
             System.err.println(Command.CREATE_ERR.getCommand());
             e.printStackTrace();
@@ -41,47 +41,36 @@ public class ResumeController {
     }
 
     public void createResumeSheet() {
-        Sheet sheet = workbook.createSheet("이력서");
-        createPersonInfo(view.inputPersonInfo(), sheet);
-        createEducations(view.inputEducationList(), sheet);
-        createCareers(view.inputCareerList(), sheet);
+        Sheet sheet = workbook.createSheet(Command.RESUME_SHEET_NAME.getCommand());
+        Command[] titles = {Command.PERSONINFO_TITLE, Command.EDUCATION_TITLE, Command.CAREER_TITLE};
+        List<List<String>>[] datas = new List[]{
+                List.of(PersonInfo.toList(view.inputPersonInfo())),
+                Education.toList(view.inputEducationList()),
+                Career.toList(view.inputCareerList())
+        };
+
+        for (int i = 0; i < 3; i++) {
+            writeHeader(sheet, titles[i].getCommand().split(","));
+            writeCells(sheet, datas[i], i);
+        }
     }
 
     public void createSelfIntroductionSheet() {
-        Sheet sheet = workbook.createSheet("자기소개서");
+        Sheet sheet = workbook.createSheet(Command.SELF_INFO_SHEET_NAME.getCommand());
         Row row = sheet.createRow(0);
         row.createCell(0).setCellValue(view.inputSelfInformation());
     }
 
     public void getWrapCellStyle() {
-        Sheet[] sheet = {workbook.getSheetAt(0), workbook.getSheetAt(1)};
-        sheet[0].setColumnWidth(0, 7500);
-        sheet[0].setDefaultColumnWidth(20);
-        XSSFCellStyle basicStyle = defaultStyle();
-        for (int i = 0; i < 6; i++) {
-            sheet[0].setDefaultColumnStyle(i, basicStyle);
-        }
-        basicStyle.setVerticalAlignment(VerticalAlignment.TOP);
-        basicStyle.setAlignment(HorizontalAlignment.GENERAL);
-        basicStyle.setWrapText(true);
-        sheet[1].setDefaultColumnStyle(0, basicStyle);
-        sheet[1].setColumnWidth(0, 35000);
-        sheet[1].getRow(0).setHeight((short) 10000);
-    }
-
-    private XSSFCellStyle defaultStyle() {
-        XSSFCellStyle basicStyle = workbook.createCellStyle();
-        basicStyle.setAlignment(HorizontalAlignment.CENTER);
-        basicStyle.setVerticalAlignment(VerticalAlignment.CENTER);
-        Font font = workbook.createFont();
-        font.setFontHeightInPoints((short) 14);
-        basicStyle.setFont(font);
-        return basicStyle;
+        XSSFCellStyle basicStyle = getBasicStyle();
+        setResumeSheetStyle(workbook.getSheetAt(0), basicStyle);
+        setSelfInfoSheetStyle(workbook.getSheetAt(1), basicStyle);
     }
 
     public void saveWorkbookToFile() {
         try {
             workbook.write(outputStream);
+            outputStream.close();
             workbook.close();
             System.out.println(Command.FINISH.getCommand());
         } catch (IOException e) {
@@ -90,49 +79,44 @@ public class ResumeController {
         }
     }
 
-    public void createCareers(List<Career> careers, Sheet sheet) {
-        createHeader(sheet, Command.CAREER_TITLE.getCommand().split(","));
-        writeCareers(sheet, careers);
-    }
-
-    public void createEducations(List<Education> educations, Sheet sheet) {
-        createHeader(sheet, Command.EDUCATION_TITLE.getCommand().split(","));
-        writeEducations(sheet, educations);
-    }
-
-    public void createPersonInfo(PersonInfo personInfo, Sheet sheet) {
-        createHeader(sheet, Command.PERSONINFO_TITLE.getCommand().split(","));
-        writePersonInfo(sheet, personInfo);
-    }
-
-    public void writeCareers(Sheet sheet, List<Career> careers) {
-        for (Career c : careers) {
-            Row row = sheet.createRow(idx++);
-            row.createCell(0).setCellValue(c.getWorkPeriod());
-            row.createCell(1).setCellValue(c.getCompanyName());
-            row.createCell(2).setCellValue(c.getJobTitle());
-            row.createCell(3).setCellValue(c.getEmploymentYears());
+    private void writeCells(Sheet sheet, List<List<String>> datas, int idx) {
+        for (List<String> data : datas) {
+            Row row = sheet.createRow(sheet.getLastRowNum() + 1);
+            for (int i = 0; i < data.size(); i++) {
+                if (idx == 0) {
+                    writePhoto(sheet, data.get(0), row);
+                    continue;
+                }
+                row.createCell(i).setCellValue(data.get(i));
+            }
         }
     }
 
-    public void writeEducations(Sheet sheet, List<Education> educations) {
-        for (Education edu : educations) {
-            Row row = sheet.createRow(idx++);
-            row.createCell(0).setCellValue(edu.getGraduationYear());
-            row.createCell(1).setCellValue(edu.getSchoolName());
-            row.createCell(2).setCellValue(edu.getMajor());
-            row.createCell(3).setCellValue(edu.getGraduationStatus());
-        }
+    private void setSelfInfoSheetStyle(Sheet sheet, XSSFCellStyle basicStyle) {
+        basicStyle.setVerticalAlignment(VerticalAlignment.TOP);
+        basicStyle.setAlignment(HorizontalAlignment.GENERAL);
+        basicStyle.setWrapText(true);
+        sheet.setDefaultColumnStyle(0, basicStyle);
+        sheet.setColumnWidth(0, 35000);
+        sheet.getRow(0).setHeight((short) 10000);
     }
 
-    public void writePersonInfo(Sheet sheet, PersonInfo personInfo) {
-        Row row = sheet.createRow(idx++);
-        writePhoto(sheet, personInfo.getPhoto(), row);
-        row.createCell(1).setCellValue(personInfo.getName());
-        row.createCell(2).setCellValue(personInfo.getEmail());
-        row.createCell(3).setCellValue(personInfo.getAddress());
-        row.createCell(4).setCellValue(personInfo.getPhone_number());
-        row.createCell(5).setCellValue(personInfo.getBirth());
+    private void setResumeSheetStyle(Sheet sheet, XSSFCellStyle basicStyle) {
+        for (int i = 0; i < 6; i++) {
+            sheet.setDefaultColumnStyle(i, basicStyle);
+        }
+        sheet.setDefaultColumnWidth(20);
+        sheet.setColumnWidth(0, 7500);
+    }
+
+    private XSSFCellStyle getBasicStyle() {
+        XSSFCellStyle basicStyle = workbook.createCellStyle();
+        basicStyle.setAlignment(HorizontalAlignment.CENTER);
+        basicStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+        Font font = workbook.createFont();
+        font.setFontHeightInPoints((short) 14);
+        basicStyle.setFont(font);
+        return basicStyle;
     }
 
     public void writePhoto(Sheet sheet, String path, Row row) {
@@ -143,16 +127,17 @@ public class ResumeController {
             is.close();
             XSSFDrawing drawing = (XSSFDrawing) sheet.createDrawingPatriarch();
             //이미지에 대한 크기와 위치 설정하는 앵커
-            XSSFClientAnchor anchor = setPhotoSize(row);
+            XSSFClientAnchor anchor = setAnchor(row);
             //이미지 삽입
             drawing.createPicture(anchor, pictureIdx);
+            is.close();
         } catch (IOException e) {
             System.err.println(Command.IMG_ERR.getCommand());
             e.printStackTrace();
         }
     }
 
-    public XSSFClientAnchor setPhotoSize(Row row) {
+    private XSSFClientAnchor setAnchor(Row row) {
         XSSFCreationHelper helper = workbook.getCreationHelper();
         XSSFClientAnchor anchor = helper.createClientAnchor();
         row.setHeight((short) 5500);
@@ -168,8 +153,8 @@ public class ResumeController {
         return anchor;
     }
 
-    public void createHeader(Sheet sheet, String[] titles) {
-        Row header = sheet.createRow(idx++);
+    public void writeHeader(Sheet sheet, String[] titles) {
+        Row header = sheet.createRow(sheet.getLastRowNum() + 1);
         for (int i = 0; i < titles.length; i++) {
             header.createCell(i).setCellValue(titles[i]);
         }
