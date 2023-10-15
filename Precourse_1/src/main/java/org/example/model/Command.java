@@ -19,6 +19,10 @@ public enum Command {
     IMG_ERR("이미지 처리 중 문제 발생"),
     CREATE_ERR("엑셀 파일 생성 중 문제 발생"),
     SAVE_ERR("엑셀 파일 저장 중 문제 발생"),
+
+    FILENAME("resume.xlsx"),
+    RESUME_SHEET_NAME("이력서"),
+    SELF_INFO_SHEET_NAME("자기소개서")
     ;
     private final String command;
 
