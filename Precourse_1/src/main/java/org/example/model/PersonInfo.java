@@ -3,6 +3,8 @@ package org.example.model;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 public class PersonInfo {
@@ -31,6 +33,17 @@ public class PersonInfo {
         this.address = address;
         this.phone_number = phone_number;
         this.birth = birth;
+    }
+
+    public static List<String> toList(PersonInfo dto) {
+        return List.of(
+                dto.getPhoto(),
+                dto.getName(),
+                dto.getEmail(),
+                dto.getAddress(),
+                dto.getPhone_number(),
+                dto.getBirth()
+        );
     }
 
     @Override
