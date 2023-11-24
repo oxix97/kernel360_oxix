@@ -1,4 +1,4 @@
-package school;
+package org.fastcampus.project.school;
 
 import java.util.ArrayList;
 

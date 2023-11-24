@@ -1,4 +1,4 @@
-package report;
+package org.fastcampus.project.report;
 
 import java.util.ArrayList;
 

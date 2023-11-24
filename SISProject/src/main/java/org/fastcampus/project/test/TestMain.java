@@ -1,11 +1,12 @@
-package test;
+package org.fastcampus.project.test;
 
-import school.School;
-import school.Score;
-import school.Student;
-import school.Subject;
-import report.GenerateGradeReport;
-import utils.Define;
+
+import org.fastcampus.project.report.GenerateGradeReport;
+import org.fastcampus.project.school.School;
+import org.fastcampus.project.school.Score;
+import org.fastcampus.project.school.Student;
+import org.fastcampus.project.school.Subject;
+import org.fastcampus.project.utils.Define;
 
 public class TestMain {
 

@@ -1,4 +1,4 @@
-package utils;
+package org.fastcampus.project.utils;
 
 public class Define {
 

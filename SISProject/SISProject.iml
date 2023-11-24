@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module type="JAVA_MODULE" version="4">
-  <component name="NewModuleRootManager" inherit-compiler-output="true">
-    <exclude-output />
-    <content url="file://$MODULE_DIR$">
-      <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
-    </content>
-    <orderEntry type="inheritedJdk" />
-    <orderEntry type="sourceFolder" forTests="false" />
+<module version="4">
+  <component name="CheckStyle-IDEA-Module" serialisationVersion="2">
+    <option name="activeLocationsIds" />
   </component>
   <component name="SonarLintModuleSettings">
-    <option name="uniqueId" value="419a2440-ca53-41e5-8a2a-d85c44c3248e" />
+    <option name="uniqueId" value="98e7a911-0272-4fac-8d26-25033cde3f23" />
   </component>
 </module>

@@ -1,4 +1,4 @@
-package grade;
+package org.fastcampus.project.grade;
 
 public class PassFailEvaluation implements GradeEvaluation{
 

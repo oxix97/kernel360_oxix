@@ -1,4 +1,4 @@
-package school;
+package org.fastcampus.project.school;
 
 public class Score {
 	int studentId;   //학번
