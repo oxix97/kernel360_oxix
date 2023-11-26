@@ -9,6 +9,8 @@ logging:
     org.hibernate.type.descriptor.sql.BasicBinder: trace
 springdoc:
   show-actuator: true
+  swagger-ui:
+    enabled: true
 spring:
   mvc:
     cors:
