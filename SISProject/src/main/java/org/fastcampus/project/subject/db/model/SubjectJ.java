@@ -1,19 +1,21 @@
-package org.fastcampus.project.school;
+package org.fastcampus.project.subject.db.model;
+
+import org.fastcampus.project.student.db.model.StudentJ;
+import org.fastcampus.project.utils.Define;
 
 import java.util.ArrayList;
-import utils.Define;
 
 
-public class Subject {
+public class SubjectJ {
 	private String subjectName;  //과목 이름
 	private int subjectId;      // 과목 고유번호
 	private int gradeType;      // 과목 평가 방법 기본은 A,B 방식
 	
 	//수강 신청한 학생 리스트
 	//register() 메서드를 호출하면 리스트에 추가 됨
-	private ArrayList<Student> studentList = new ArrayList<Student>();
+	private ArrayList<StudentJ> studentJList = new ArrayList<StudentJ>();
 	
-	public Subject(String subjectName, int subjectId){
+	public SubjectJ(String subjectName, int subjectId){
 		this.subjectName = subjectName;
 		this.subjectId = subjectId;
 		this.gradeType = Define.AB_TYPE;   //기본적으로 A, B 타입
@@ -35,12 +37,12 @@ public class Subject {
 		this.subjectId = subjectId;
 	}
 
-	public ArrayList<Student> getStudentList() {
-		return studentList;
+	public ArrayList<StudentJ> getStudentList() {
+		return studentJList;
 	}
 
-	public void setStudentList(ArrayList<Student> studentList) {
-		this.studentList = studentList;
+	public void setStudentList(ArrayList<StudentJ> studentJList) {
+		this.studentJList = studentJList;
 	}
 
 	public int getGradeType() {
@@ -51,7 +53,7 @@ public class Subject {
 		this.gradeType = gradeType;
 	}
 
-	public void register(Student student){  //수강신청
-		studentList.add(student);
+	public void register(StudentJ studentJ){  //수강신청
+		studentJList.add(studentJ);
 	}
 }
