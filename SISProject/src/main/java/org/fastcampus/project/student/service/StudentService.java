@@ -13,8 +13,4 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class StudentService {
     private final StudentRepository studentRepository;
-
-    public void save() {
-
-    }
 }

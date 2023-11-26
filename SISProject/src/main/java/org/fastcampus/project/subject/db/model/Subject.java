@@ -26,6 +26,8 @@ public class Subject extends AuditingField {
 
     private String name;
 
+    private int gradeType;
+
     @ManyToOne(optional = false)
     private School school;
 
@@ -49,13 +51,14 @@ public class Subject extends AuditingField {
         return Objects.hash(id);
     }
 
-    private Subject(String name, School school) {
+    private Subject(String name, int gradeType, School school) {
         this.name = name;
+        this.gradeType = gradeType;
         this.school = school;
     }
 
-    public static Subject of(String name, School school) {
-        return new Subject(name, school);
+    public static Subject of(String name, int gradeType, School school) {
+        return new Subject(name, gradeType, school);
     }
 
 

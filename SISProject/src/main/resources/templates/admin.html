@@ -8,6 +8,87 @@
     <title>실버벨 학교 통계 페이지</title>
 </head>
 <body>
+<div style="border: 1px solid gold; float: left; width: 33%;">
+    <h1>전체 인원 국어 성적표</h1>
+    <table>
+        <thead>
+        <tr>
+            <th>학번</th>
+            <th>이름</th>
+            <th>전공 과목</th>
+            <th>점수</th>
+            <th>학점</th>
+        </tr>
+        </thead>
+        <tbody id="korean" th:value="1001">
+        </tbody>
+    </table>
+</div>
+<div style="border: 1px solid red; float: left; width: 33%;">
 
+    <h1>전체 인원 수학 성적표</h1>
+    <table>
+        <thead>
+        <tr>
+            <th>학번</th>
+            <th>이름</th>
+            <th>전공 과목</th>
+            <th>점수</th>
+            <th>학점</th>
+        </tr>
+        </thead>
+        <tbody id="math">
+        </tbody>
+    </table>
+</div>
+<div style="border: 1px solid blue; float: left; width: 33%;">
+    <h1>전체 인원 댄스 성적표</h1>
+    <table>
+        <thead>
+        <tr>
+            <th>학번</th>
+            <th>이름</th>
+            <th>전공 과목</th>
+            <th>점수</th>
+            <th>학점</th>
+        </tr>
+        </thead>
+        <tbody id="dance">
+        </tbody>
+    </table>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+    $(document).ready(function () {
+        getSubjectScores(1001, 'korean');
+        getSubjectScores(2001, 'math');
+        getSubjectScores(3001, 'dance');
+    });
+
+    function getSubjectScores(subject, tag) {
+        $.ajax({
+            type: 'GET',
+            url: '/subject/' + subject,
+            dataType: 'json',
+            success: function (data) {
+                console.log(data);
+                let tr = '';
+                for (let i = 0; i < data.length; i++) {
+                    tr += '<tr>';
+                    tr += '<td>' + data[i].studentId + '</td>';
+                    tr += '<td>' + data[i].studentName + '</td>';
+                    tr += '<td>' + data[i].majorSubject + '</td>';
+                    tr += '<td>' + data[i].value + '</td>';
+                    tr += '<td>' + data[i].grade + '</td>';
+                    tr += '</tr>';
+                }
+                $('#' + tag).append(tr);
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+</script>
 </body>
 </html>
