@@ -10,6 +10,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @ToString
 @Entity
@@ -28,19 +29,30 @@ public class Student extends AuditingField {
     @ManyToOne(optional = false)
     private School school;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Student student)) return false;
+        return Objects.equals(id, student.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
     @ToString.Exclude
     @OneToMany(mappedBy = "student")
     private List<StudentSubject> subjects = new ArrayList<>();
 
-    private Student(Long id, String name, String majorSubject, School school) {
-        this.id = id;
+    private Student(String name, String majorSubject, School school) {
         this.name = name;
         this.majorSubject = majorSubject;
         this.school = school;
     }
 
-    public static Student of(Long id, String name, String majorSubject, School school) {
-        return new Student(id, name, majorSubject, school);
+    public static Student of(String name, String majorSubject, School school) {
+        return new Student(name, majorSubject, school);
     }
 
 

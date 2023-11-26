@@ -12,6 +12,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @ToString
@@ -34,13 +35,24 @@ public class School extends AuditingField {
     @OneToMany(mappedBy = "school", cascade = CascadeType.ALL)
     private List<Student> students = new ArrayList<>();
 
-    private School(Long id, String name) {
-        this.id = id;
+    private School(String name) {
         this.name = name;
     }
 
-    public static School of(Long id, String name) {
-        return new School(id, name);
+    public static School of(String name) {
+        return new School(name);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof School school)) return false;
+        return Objects.equals(id, school.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 
     protected School() {

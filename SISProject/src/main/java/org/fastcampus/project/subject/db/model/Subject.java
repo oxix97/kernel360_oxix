@@ -12,6 +12,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @ToString
 @Entity
@@ -36,15 +37,25 @@ public class Subject extends AuditingField {
     @OneToMany(mappedBy = "subject")
     private List<Score> scores = new ArrayList<>();
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Subject subject)) return false;
+        return Objects.equals(id, subject.id);
+    }
 
-    private Subject(Long id, String name, School school) {
-        this.id = id;
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    private Subject(String name, School school) {
         this.name = name;
         this.school = school;
     }
 
-    public static Subject of(Long id, String name, School school) {
-        return new Subject(id, name, school);
+    public static Subject of(String name, School school) {
+        return new Subject(name, school);
     }
 
 

@@ -8,6 +8,8 @@ import org.fastcampus.project.base.db.AuditingField;
 import org.fastcampus.project.subject.db.model.Subject;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.util.Objects;
+
 @ToString
 @Entity
 @Slf4j
@@ -23,14 +25,25 @@ public class Score extends AuditingField {
 
     private int value;
 
-    private Score(Long id, Subject subject, int value) {
-        this.id = id;
+    private Score(Subject subject, int value) {
         this.subject = subject;
         this.value = value;
     }
 
-    public static Score of(Long id, Subject subject, int value) {
-        return new Score(id, subject, value);
+    public static Score of(Subject subject, int value) {
+        return new Score(subject, value);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Score score)) return false;
+        return Objects.equals(id, score.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 
 
