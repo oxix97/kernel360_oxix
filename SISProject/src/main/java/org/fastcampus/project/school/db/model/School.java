@@ -1,40 +1,48 @@
-package org.fastcampus.project.school;
+package org.fastcampus.project.school.db.model;
+
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
+import org.fastcampus.project.base.db.AuditingField;
+import org.fastcampus.project.student.db.model.Student;
+import org.fastcampus.project.subject.db.model.Subject;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class School {
+@Slf4j
+@ToString
+@Getter
+@EntityListeners(AuditingEntityListener.class)
+@Entity
+public class School extends AuditingField {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String name;
 
-	private static School instance = new School();
-	
-	private static String SCHOOL_NAME = "SilverBell School";
-	private ArrayList<Student> studentList = new ArrayList<Student>();
-	private ArrayList<Subject> subjectList = new ArrayList<Subject>();
-	
-	private School(){}
-	
-	public static School getInstance(){
-		if(instance == null) 
-			instance = new School();
-		return instance;
-	}
-	
-	public ArrayList<Student> getStudentList(){
-		return studentList;
-	}
-	
-	public void addStudent(Student student){
-		studentList.add(student);
-	}
+    @ToString.Exclude
+    @Setter
+    @OneToMany(mappedBy = "school", cascade = CascadeType.ALL)
+    private List<Subject> subjects = new ArrayList<>();
 
-	public void addSubject(Subject subject) {
-		subjectList.add(subject);
-	}
+    @ToString.Exclude
+    @Setter
+    @OneToMany(mappedBy = "school", cascade = CascadeType.ALL)
+    private List<Student> students = new ArrayList<>();
 
-	public ArrayList<Subject> getSubjectList() {
-		return subjectList;
-	}
+    private School(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 
-	public void setSubjectList(ArrayList<Subject> subjectList) {
-		this.subjectList = subjectList;
-	}
+    public static School of(Long id, String name) {
+        return new School(id, name);
+    }
+
+    protected School() {
+    }
 }
