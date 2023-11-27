@@ -9,6 +9,72 @@
     <title>실버벨 학교 성적 등록 페이지</title>
 </head>
 <body>
+<div>
+    <label for="student-id">학번</label>
+    <input type="number" id="student-id" name="student-id" placeholder="학번을 입력하세요.">
+    <br/>
+    <label for="subject-list">과목명</label>
+    <select name="subject-list" id="subject-list">
 
+    </select>
+    <br/>
+    <label for="major-list">중점 과목</label>
+    <select name="major-list" id="major-list">
+
+    </select>
+    <br/>
+    <label for="subject-score">과목 점수</label>
+    <input type="number" id="subject-score" name="subject-score" placeholder="과목 점수를 입력하세요.">
+    <br/>
+    <button id="register" type="button">등록</button>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+    $('#register').on('click', function () {
+        let studentId = $('#student-id').val();
+        let subjectId = $('#subject-list').val();
+        let majorId = $('#major-list').val();
+        let subjectScore = $('#subject-score').val();
+        console.log(studentId);
+        console.log(subjectId);
+        console.log(majorId);
+        console.log(subjectScore);
+        let data = {
+            studentId: studentId,
+            subjectId: subjectId,
+            majorId: majorId,
+            value: subjectScore,
+        };
+        $.ajax({
+            type: 'POST',
+            url: '/api/score/add',
+            contentType: 'application/json',
+            data: JSON.stringify(data),
+            success: function (response) {
+                alert('성적 등록이 완료되었습니다.');
+                window.location.href = '/admin';
+            }
+        });
+    });
+    $(document).ready(function () {
+        getSubjectList();
+    });
+
+    function getSubjectList() {
+        $.ajax({
+            type: 'GET',
+            url: '/api/subject/all',
+            success: function (response) {
+                for (let i = 0; i < response.length; i++) {
+                    console.log(response[i]);
+                    let subject = response[i];
+                    let tempHtml = '<option value="' + subject.id + '">' + subject.name + '</option>';
+                    $('#subject-list').append(tempHtml);
+                    $('#major-list').append(tempHtml);
+                }
+            }
+        });
+    }
+</script>
 </body>
 </html>

@@ -12,10 +12,10 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.util.Objects;
 
 @ToString
-@Entity
 @Slf4j
-@EntityListeners(AuditingEntityListener.class)
 @Getter
+@EntityListeners(AuditingEntityListener.class)
+@Entity
 public class Score extends AuditingField {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

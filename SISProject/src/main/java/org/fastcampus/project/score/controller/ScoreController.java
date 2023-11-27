@@ -3,18 +3,18 @@ package org.fastcampus.project.score.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.fastcampus.project.score.converter.dto.ScoreDto;
+import org.fastcampus.project.score.converter.request.RequestScore;
 import org.fastcampus.project.score.converter.response.ResponseStudentScore;
 import org.fastcampus.project.score.converter.response.ResponseSubjectScore;
 import org.fastcampus.project.score.service.ScoreService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.fastcampus.project.student.converter.dto.StudentDto;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
+@RequestMapping("/api/score")
 @RestController
 public class ScoreController {
     private final ScoreService scoreService;
@@ -35,6 +35,14 @@ public class ScoreController {
         return scoreService.getStudentBySubjectAllScores(studentId).stream()
                 .map(it -> new ResponseStudentScore(it.subject().name(), it.value()))
                 .toList();
+    }
+
+    @PostMapping("/add")
+    public void addScore(
+            @RequestBody RequestScore request
+    ) {
+        log.info("request: {}", request);
+        scoreService.addScore(request);
     }
 
 }

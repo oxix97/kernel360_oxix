@@ -23,6 +23,22 @@ public record ScoreDto(
         String modifiedBy
 ) {
     public static ScoreDto of(
+            SubjectDto subject,
+            StudentDto student,
+            int value
+    ) {
+        return new ScoreDto(
+                null,
+                subject,
+                student,
+                value,
+                null,
+                null,
+                null,
+                null
+        );
+    }
+    public static ScoreDto of(
             Long id,
             SubjectDto subject,
             StudentDto student,

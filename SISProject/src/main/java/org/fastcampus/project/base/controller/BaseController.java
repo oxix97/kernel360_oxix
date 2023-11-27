@@ -11,9 +11,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 @RequiredArgsConstructor
 @Controller
 public class BaseController {
-    private final StudentService studentService;
-    private final SubjectService subjectService;
-
     @GetMapping("/")
     public String root() {
         return "index";
@@ -22,11 +19,6 @@ public class BaseController {
     @GetMapping("/register")
     public String register() {
         return "register";
-    }
-
-    @GetMapping("/calculator")
-    public String calculator() {
-        return "calculator";
     }
 
     @GetMapping("/admin")

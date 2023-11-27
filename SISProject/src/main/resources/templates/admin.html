@@ -68,7 +68,7 @@
     function getSubjectScores(subject, tag) {
         $.ajax({
             type: 'GET',
-            url: '/subject/' + subject,
+            url: '/api/score/subject/' + subject,
             dataType: 'json',
             success: function (data) {
                 console.log(data);
