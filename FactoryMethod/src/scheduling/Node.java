@@ -1,4 +1,4 @@
-package factory.before;
+package scheduling;
 
 public record Node(
         String name,
