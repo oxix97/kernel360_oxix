@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 public record StudentDto(
         Long id,
         String name,
-        int majorSubject,
+        Long majorSubject,
         SchoolDto school,
         LocalDateTime createdAt,
         String createdBy,
@@ -23,7 +23,7 @@ public record StudentDto(
     public static StudentDto of(
             Long id,
             String name,
-            int majorSubject,
+            Long majorSubject,
             SchoolDto school,
             LocalDateTime createdAt,
             String createdBy,

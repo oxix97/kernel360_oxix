@@ -22,11 +22,11 @@ public record ResponseSubjectScore(
         );
     }
 
-    private static String majorSubjectName(int majorSubject) {
-        return switch (majorSubject) {
+    private static String majorSubjectName(Long majorSubject) {
+        return switch (majorSubject.intValue()) {
             case 1001 -> "국어";
-            case 2001 -> "영어";
-            case 3001 -> "수학";
+            case 2001 -> "수학";
+            case 3001 -> "댄스";
             default -> "nope";
         };
     }

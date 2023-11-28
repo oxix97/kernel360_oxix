@@ -11,17 +11,15 @@
 <body>
 <div>
     <label for="student-id">학번</label>
-    <input type="number" id="student-id" name="student-id" placeholder="학번을 입력하세요.">
+    <input type="number" id="student-id" name="student-id" placeholder="학번을 입력하세요." onchange="getMajorName()">
     <br/>
     <label for="subject-list">과목명</label>
     <select name="subject-list" id="subject-list">
 
     </select>
     <br/>
-    <label for="major-list">중점 과목</label>
-    <select name="major-list" id="major-list">
-
-    </select>
+    <label for="major">중점 과목</label>
+    <input id="major" name="major" type="text" readonly>
     <br/>
     <label for="subject-score">과목 점수</label>
     <input type="number" id="subject-score" name="subject-score" placeholder="과목 점수를 입력하세요.">
@@ -33,16 +31,13 @@
     $('#register').on('click', function () {
         let studentId = $('#student-id').val();
         let subjectId = $('#subject-list').val();
-        let majorId = $('#major-list').val();
         let subjectScore = $('#subject-score').val();
         console.log(studentId);
         console.log(subjectId);
-        console.log(majorId);
         console.log(subjectScore);
         let data = {
             studentId: studentId,
             subjectId: subjectId,
-            majorId: majorId,
             value: subjectScore,
         };
         $.ajax({
@@ -53,6 +48,9 @@
             success: function (response) {
                 alert('성적 등록이 완료되었습니다.');
                 window.location.href = '/admin';
+            },
+            error: function () {
+                alert('등록 실패 : 점수를 다시 확인해주세요.');
             }
         });
     });
@@ -70,8 +68,24 @@
                     let subject = response[i];
                     let tempHtml = '<option value="' + subject.id + '">' + subject.name + '</option>';
                     $('#subject-list').append(tempHtml);
-                    $('#major-list').append(tempHtml);
                 }
+            }
+        });
+    }
+
+    function getMajorName() {
+        var id = document.getElementById('student-id').value;
+        $.ajax({
+            type: 'GET',
+            url: '/api/student/' + id,
+            success: function (response) {
+                document.getElementById('major').value = response;
+                console.log(name);
+            },
+            error: function () {
+                document.getElementById('major').value = '';
+                document.getElementById('student-id').value = '';
+                alert('학번을 다시 확인해주세요. 최대(150)');
             }
         });
     }

@@ -27,13 +27,6 @@ public class ScoreService {
     private final StudentRepository studentRepository;
 
     @Transactional(readOnly = true)
-    public List<ScoreDto> getAllSubjectScore() {
-        return scoreRepository.findAll().stream()
-                .map(ScoreDto::from)
-                .toList();
-    }
-
-    @Transactional(readOnly = true)
     public List<ScoreDto> getStudentBySubjectAllScores(Long studentId) {
         return scoreRepository.findAllByStudentId(studentId).stream()
                 .map(ScoreDto::from)

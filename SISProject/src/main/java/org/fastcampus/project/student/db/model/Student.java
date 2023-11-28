@@ -24,7 +24,7 @@ public class Student extends AuditingField {
 
     private String name;
 
-    private int majorSubject;
+    private Long majorSubject;
 
     @ManyToOne(optional = false)
     private School school;
@@ -45,13 +45,13 @@ public class Student extends AuditingField {
     @OneToMany(mappedBy = "student")
     private List<StudentSubject> subjects = new ArrayList<>();
 
-    private Student(String name, int majorSubject, School school) {
+    private Student(String name, Long majorSubject, School school) {
         this.name = name;
         this.majorSubject = majorSubject;
         this.school = school;
     }
 
-    public static Student of(String name, int majorSubject, School school) {
+    public static Student of(String name, Long majorSubject, School school) {
         return new Student(name, majorSubject, school);
     }
 

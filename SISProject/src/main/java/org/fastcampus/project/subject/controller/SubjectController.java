@@ -21,5 +21,6 @@ public class SubjectController {
     public List<SubjectDto> getAllSubjects() {
         return subjectService.getAllSubjects();
     }
+
 }
 
